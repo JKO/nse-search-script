@@ -46,26 +46,15 @@ class Helper:
       for key,value in dbmodule.lastresults.items():
         print("\033[1;32m[+] {0:40} {1:35}\033[0m".format(*[value["name"],value["author"]]))
 
-
   # Display the documentation per script
   def displayDoc(self):
     try:
       scriptFile = open(dbmodule.scriptsPath+self.args,'r')
-      lines = scriptFile.read().splitlines()
-      for line in lines:
-        if line.startswith("license"):
-          break
-        print('\033[1;96m'+line+'\033[0m')
-      scriptFile.close()
+      self.__readLines(scriptFile)
     except Exception, e:
       try:
         scriptFile = open(dbmodule.scriptsPath+self.args+".nse",'r')
-        lines = scriptFile.read().splitlines()
-        for line in lines:
-          if line.startswith("license"):
-            break
-          print('\033[1;96m'+line+'\033[0m')
-        scriptFile.close()
+        self.__readLines(scriptFile)
       except Exception, e:
         print i18n.t("setup.del_fav_error")
     finally:
@@ -86,6 +75,7 @@ class Helper:
       return self.__setParams()
     else:
       return False
+
   #private funtion to set params for addfav command
   def __addfavparams(self):
     if self.args.find('name:') != -1 or self.args.find('ranking:') != -1:
@@ -123,3 +113,13 @@ class Helper:
     else:
       print i18n.t("setup.bad_params")
     return argsdic
+
+  #Private function to read lines
+  def __readLines(self,scriptFile):
+    lines = scriptFile.read().splitlines()
+    for line in lines:
+      if line.startswith("--@output") or line.startswith("-- @output"):
+        break
+      if not bool('local' in line):
+        print('\033[1;96m'+line+'\033[0m')
+    scriptFile.close()
