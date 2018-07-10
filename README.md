@@ -33,7 +33,8 @@ $ pip install pyyaml python-i18n
 #### REDHAT(CentOS)
 
 ```
-# yum -y install bzip2 groupinstall "Development Tools"
+# yum -y install bzip2
+# yum -y groupinstall "Development Tools"
 ```
 
 ### Installation
